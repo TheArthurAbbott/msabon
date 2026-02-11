@@ -1,0 +1,25 @@
+port: 3000
+swaggerPath: /swagger
+logLevel: verbose
+ 
+connections:
+  - endpoint: __ENPT__
+    server: __SRVR__
+    port: 1433
+    username: __USER__
+    password: __PASS__
+    database: __DTBS__
+    advanced: false
+    include:
+      tables:
+        - "__REGX__"
+        - "__TABL__"
+      views:
+        - "__REGX__"
+        - "__TABL__"
+      procedures:
+        - "__REGX__"
+        - "__TABL__"
+      functions:
+        - "__REGX__"
+        - "__TABL__"
