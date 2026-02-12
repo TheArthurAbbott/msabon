@@ -70,6 +70,8 @@ async function start() {
   }
 
   const port = process.env.PORT || cfg.port || 3000;
+  const host = process.env.HOST || cfg.host || '127.0.0.1';
+  const http = process.env.HTTP || cfg.http || 'http';
 
   // collect all schemas across endpoints
   const components = { schemas: {} };
@@ -78,7 +80,7 @@ async function start() {
   let openApi = {
     openapi: '3.0.0',
     info: { title: "MS SQL API built on NodeJS (MsABON)", version: '0.2.0' },
-    servers: [{ url: `http://localhost:${port}` }],
+    servers: [{ url: `${http}://${host}:${port}` }],
     components,
     paths: {},
     tags: [
@@ -243,7 +245,7 @@ async function start() {
     })
   );
 
-  // List tables under an endpoint: e.g., http://localhost:PORT/ENDPOINT/KIND/
+  // List tables under an endpoint: e.g., HTTP://HOST:PORT/ENDPOINT/KIND/
   app.get('/:endpoint([A-Za-z0-9_-]+)/', (req, res) => {
     const endpoint = req.params.endpoint;
     const schemas = openApi.components?.schemas || {};
@@ -293,8 +295,8 @@ async function start() {
   buildPathsFromComponents();
 
   app.listen(port, () => {
-    logger.info(`Server listening on http://localhost:${port}`);
-    logger.info(`If you would like to use the swagger to test your endpoints, go to http://localhost:${port}${cfg.swaggerPath || '/api-docs'}`);
+    logger.info(`Server listening on ${http}://${host}:${port}`);
+    logger.info(`If you would like to use the swagger to test your endpoints, go to ${http}://${host}:${port}${cfg.swaggerPath || '/api-docs'}`);
   });
 }
 
@@ -302,3 +304,4 @@ start().catch(err => {
   logger.error(err);
   process.exit(1);
 });
+
