@@ -21,6 +21,8 @@ npm install
 3. Edit `config.yaml` (project root) to describe one or more connections and app settings. Example:
 
 ```yaml
+http: http
+host: 127.0.0.1
 port: 3000
 swaggerPath: /swagger
 logLevel: verbose
@@ -69,6 +71,8 @@ connections:
 ```
 
 Notes about the config fields
+- `http`: default server http or https protocol (can be overridden with `HTTP` env var).
+- `host`: default server hostname / IP address (can be overridden with `HOST` env var).
 - `port`: default server port (can be overridden with `PORT` env var).
 - `swaggerPath`: where Swagger UI is served (default `/api-docs` if not set).
 - `logLevel`: currently respected informally; logger prints `info` & `verbose` messages.
