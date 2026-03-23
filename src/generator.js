@@ -1,3 +1,5 @@
+// generator.js
+
 const sql = require('mssql');
 const logger = require('./logger');
 const crypto = require('crypto');
@@ -481,8 +483,19 @@ function registerRoutes(app, tableMeta, endpoint) {
               continue;
             }
 
-            // literal equality (collect to group as IN)
-            eqVals.push(t);
+            // wildcard/prefix on text columns -> LIKE; else literal equality
+            const isText = /char|text|ntext/i.test(typ);
+            if (isText && t.startsWith('^')) {
+              const p = `${col.COLUMN_NAME.replace(/[^A-Za-z0-9_]/g, '_')}__like_${idx++}`;
+              posConds.push(`[${col.COLUMN_NAME}] LIKE @${p}`);
+              addParam(p, t.slice(1) + '%');
+            } else if (isText && (t.includes('%') || t.includes('_'))) {
+              const p = `${col.COLUMN_NAME.replace(/[^A-Za-z0-9_]/g, '_')}__like_${idx++}`;
+              posConds.push(`[${col.COLUMN_NAME}] LIKE @${p}`);
+              addParam(p, t);
+            } else {
+              eqVals.push(t);
+            }
           }
 
           if (eqVals.length === 1) {
