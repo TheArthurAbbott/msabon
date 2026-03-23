@@ -161,6 +161,8 @@ Filter any column via query string:
   - `not.null` --> `IS NOT NULL`
   - `is.true` --> `TRUE` (BIT) or `1` (INT-like)
   - `is.false` --> `FALSE` (BIT) or `0` (INT-like)
+- Wildcards accepted: `^` for prefix and `%` for wilcard.
+  - Example: ?Name=^Widg&Line=%500%
 - To filter columns actually named `order`, `limit`, `offset`, or `select`, prefix the column with `~`.
   - Example: `?~order=is.false`
 - Combine multiple acceptable values for a single column using commas for `OR`:
